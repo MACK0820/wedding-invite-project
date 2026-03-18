@@ -1,0 +1,47 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --black: #0a0a0a;
+  --deep-black: #050505;
+  --dark-gray: #1a1a1a;
+  --charcoal: #2c2c2c;
+  --ash: #4a4a4a;
+  --ash-light: #6b6b6b;
+  --silver: #9a9a9a;
+  --silver-light: #c0c0c0;
+  --white-smoke: #e8e8e8;
+  --ivory: #f0ede8;
+  --gold: #b8975a;
+  --gold-light: #d4b87a;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Cormorant Garamond', serif;
+  --font-text: 'EB Garamond', serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--deep-black);
+  color: var(--ivory);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  cursor: default;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--deep-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--ash);
+}
