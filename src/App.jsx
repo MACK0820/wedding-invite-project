@@ -129,7 +129,7 @@ export default function App() {
 
           <div className="details-grid">
             <AnimatedSection delay={100} className="detail-card">
-              <div className="detail-icon">💍🤍🕊️</div>
+              <div className="detail-icon">💍</div>
               <h3 className="detail-card-title">Ceremony</h3>
               <p className="detail-card-time">Four O'Clock in the Afternoon</p>
               <p className="detail-card-date">15 September 2026</p>
@@ -250,7 +250,7 @@ export default function App() {
           <img src={cathedral5} alt="Cathedral at dusk" />
           <div className="atm-overlay" />
           <div className="atm-label">
-            <span>A Cathedral of Light</span>
+            <span>Gothic Architecture</span>
           </div> 
         </div>
       </section>
