@@ -130,75 +130,101 @@ function ThemeMusic() {
   const [playing, setPlaying] = useState(false)
   const [muted, setMuted] = useState(false)
   const [visible, setVisible] = useState(false)
+  const [autoplayBlocked, setAutoplayBlocked] = useState(false)
   const audioRef = useRef(null)
 
   useEffect(() => {
-    // "Close To You" — royalty-free cover via SoundHelix
-    // Replace src with your own audio file path in /public for the real song
     const audio = new Audio('/close-to-you.mp3')
     audio.loop = true
-    audio.volume = 0.3
+    audio.volume = 0.35
+    audio.preload = 'auto'
     audioRef.current = audio
 
-    // Try autoplay — browsers require user interaction first, so we catch silently
-    const tryPlay = async () => {
+    const tryAutoplay = async () => {
       try {
         await audio.play()
         setPlaying(true)
+        setAutoplayBlocked(false)
       } catch {
-        // Autoplay blocked — show the play button
+        setAutoplayBlocked(true)
       }
       setVisible(true)
     }
-    // Small delay so the page loads first
-    const timer = setTimeout(tryPlay, 800)
+
+    tryAutoplay()
+
     return () => {
-      clearTimeout(timer)
       audio.pause()
       audio.src = ''
     }
   }, [])
 
-  const toggle = () => {
+  const toggle = async () => {
     if (!audioRef.current) return
+
     if (playing) {
       audioRef.current.pause()
       setPlaying(false)
     } else {
-      audioRef.current.play().catch(() => {})
-      setPlaying(true)
+      try {
+        await audioRef.current.play()
+        setPlaying(true)
+        setAutoplayBlocked(false)
+      } catch {
+        setAutoplayBlocked(true)
+      }
     }
   }
 
   const toggleMute = () => {
-    if (audioRef.current) audioRef.current.muted = !muted
-    setMuted(m => !m)
+    if (!audioRef.current) return
+    audioRef.current.muted = !audioRef.current.muted
+    setMuted(audioRef.current.muted)
   }
 
   if (!visible) return null
 
   return (
-    <div className={`music-player ${playing ? 'playing' : ''}`}>
-      <div className="music-vinyl">
-        <div className={`vinyl-disc ${playing ? 'spinning' : ''}`}>
-          <div className="vinyl-center" />
+    <>
+      {autoplayBlocked && !playing && (
+        <div className="autoplay-banner">
+          <span>♫ Tap play to start the music</span>
+        </div>
+      )}
+
+      <div className={`music-player ${playing ? 'playing' : ''}`}>
+        <div className="music-vinyl">
+          <div className={`vinyl-disc ${playing ? 'spinning' : ''}`}>
+            <div className="vinyl-center" />
+          </div>
+        </div>
+
+        <div className="music-info">
+          <p className="music-title">CLOSE TO YOU</p>
+          <p className="music-label">{playing ? 'Now Playing' : 'Paused'}</p>
+        </div>
+
+        <div className="music-controls">
+          {playing && (
+            <button
+              className="music-btn"
+              onClick={toggleMute}
+              title={muted ? 'Unmute' : 'Mute'}
+            >
+              {muted ? '🔇' : '🔊'}
+            </button>
+          )}
+
+          <button
+            className="music-btn primary"
+            onClick={toggle}
+            title={playing ? 'Pause' : 'Play'}
+          >
+            {playing ? '⏸' : '▶'}
+          </button>
         </div>
       </div>
-      <div className="music-info">
-        <p className="music-title">CLOSE TO YOU</p>
-        <p className="music-label">{playing ? 'Now Playing' : 'Paused'}</p>
-      </div>
-      <div className="music-controls">
-        {playing && (
-          <button className="music-btn" onClick={toggleMute} title={muted ? 'Unmute' : 'Mute'}>
-            {muted ? '🔇' : '🔊'}
-          </button>
-        )}
-        <button className="music-btn primary" onClick={toggle} title={playing ? 'Pause' : 'Play'}>
-          {playing ? '⏸' : '▶'}
-        </button>
-      </div>
-    </div>
+    </>
   )
 }
 
