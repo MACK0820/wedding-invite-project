@@ -16,7 +16,7 @@ An interactive and modern wedding invitation web application that allows guests 
 ---
 
 ## 🔗 Live Demo  
-[Insert deployment URL here]
+[https://wedding-invitation-project-olive.vercel.app/]
 
 ---
 
@@ -140,3 +140,4 @@ src/
 ## 📄 License
 
 This project is for academic purposes only.
+
